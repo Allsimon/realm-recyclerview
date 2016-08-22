@@ -78,7 +78,7 @@ public class RealmRecyclerView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
-    
+
     public RealmRecyclerView(Context context, AttributeSet attrs, int defStyleAttr, int bufferItems) {
         super(context, attrs, defStyleAttr);
         if (bufferItems <= 0) bufferItems = 0;
@@ -333,6 +333,9 @@ public class RealmRecyclerView extends FrameLayout {
 
                         private void update() {
                             updateEmptyContentContainerVisibility(adapter);
+                            if (hasLoadMoreFired) {
+                                resetHasLoadMoreFired();
+                            }
                         }
                     }
             );
@@ -351,8 +354,8 @@ public class RealmRecyclerView extends FrameLayout {
     //
     // Expose public RecyclerView methods to the RealmRecyclerView
     //
-    
-    
+
+
     public void setItemViewCacheSize(int size) {
         recyclerView.setItemViewCacheSize(size);
     }
@@ -364,10 +367,10 @@ public class RealmRecyclerView extends FrameLayout {
     public void scrollToPosition(int position) {
         recyclerView.scrollToPosition(position);
     }
-    
+
     //
     // Expose public RecycleView
-    
+
     public RecyclerView getRecycleView(){
         return recyclerView;
     }
@@ -387,7 +390,7 @@ public class RealmRecyclerView extends FrameLayout {
         isRefreshing = refreshing;
         swipeRefreshLayout.setRefreshing(refreshing);
     }
-    
+
     public void resetHasLoadMoreFired() {
         hasLoadMoreFired = false;
     }

@@ -388,10 +388,12 @@ public class MainActivity extends RealmBaseActivity {
                 } catch (InterruptedException ignored) {
                 }
                 Realm instance = Realm.getInstance(getRealmConfig());
+                RealmResults<QuoteModel> ids = instance.where(QuoteModel.class).findAllSorted("id", Sort.DESCENDING);
+                long offset = ids.size() == 0 ? 100 : ids.first().getId() + 1;
                 instance.beginTransaction();
                 for (int i = 0; i < 60; i++) {
                     QuoteModel quoteModel = instance.createObject(QuoteModel.class);
-                    quoteModel.setId(i + 100); // That is to offset for primary key
+                    quoteModel.setId(i + offset); // That is to offset for primary key
                     quoteModel.setQuote(quotes.get((int) (quoteModel.getId() % quotes.size())));
                 }
                 instance.commitTransaction();
@@ -402,7 +404,6 @@ public class MainActivity extends RealmBaseActivity {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                realmRecyclerView.disableShowLoadMore();
             }
         };
         remoteItem.execute();
